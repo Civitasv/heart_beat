@@ -4,7 +4,7 @@
 
 App::App()
     : running(true),
-      window("Heart Beat", 640, 480),
+      window("Heart Beat", 1280, 640),
       frame(0),
       number(2000),
       inside_number(4000) {

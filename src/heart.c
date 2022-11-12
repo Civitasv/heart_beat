@@ -11,7 +11,14 @@
 typedef SDL_FPoint Point;
 typedef enum { F, T } bool;
 
-static char* text[] = {"Lucy", "Where are you?", "Are you happy?", "I hope so"};
+static char* text[] = {"So",
+                       "get away",
+                       "Another way",
+                       "to feel what you",
+                       "didn't want yourself to know",
+                       "And let yourself go",
+                       "You know you didn't",
+                       "lose your self-control"};
 static int font_size = 24;
 static text_index = 0;
 
@@ -19,8 +26,8 @@ static SDL_Window* window;
 static SDL_Renderer* renderer;
 static bool running = T;
 static int frame = 0;
-static int number = 2000;
-static int inside_number = 4000;
+static int number = 4000;
+static int inside_number = 8000;
 static Point* frame_pts;
 static int frame_index = 0;
 // color configuration
@@ -116,8 +123,8 @@ Point Shrink(Point p, Point center, float ratio) {
 }
 
 void RenderHeart(int frame, int number, int inside_number) {
-  int enlarge = 10;
-  float bigger_enlarge = 11.0;
+  int enlarge = 15;
+  float bigger_enlarge = 16.0;
   if (number < 500) number = 500;
   if (inside_number < 500) inside_number = 500;
 
@@ -242,7 +249,7 @@ void OnRender() {
   frame = (frame + 1) % 20;
   fg_index = (fg_index + 1) % (sizeof(fg) / sizeof(fg[0]));
 
-  text_index = (text_index + 1) % 80;
+  text_index = (text_index + 1) % 160;
 
   SDL_FreeSurface(surface_message);
   SDL_DestroyTexture(texture);

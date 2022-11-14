@@ -1,4 +1,5 @@
-﻿#include <stdlib.h>
+﻿#include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 
 #include "SDL.h"
@@ -11,14 +12,6 @@
 typedef SDL_FPoint Point;
 typedef enum { F, T } bool;
 
-static char* text[] = {"So",
-                       "get away",
-                       "Another way",
-                       "to feel what you",
-                       "didn't want yourself to know",
-                       "And let yourself go",
-                       "You know you didn't",
-                       "lose your self-control"};
 static int font_size = 24;
 static text_index = 0;
 
@@ -55,7 +48,7 @@ bool Has(Point* pts, Point p);
 
 void OnEvent(SDL_Event* event);
 
-void OnRender();
+void OnRender(char* text[], int size);
 
 int RandomInt(int start, int end) { return start + rand() % (end - start + 1); }
 
@@ -220,7 +213,7 @@ void OnEvent(SDL_Event* event) {
   }
 }
 
-void OnRender() {
+void OnRender(char* text[], int size) {
   SDL_RenderClear(renderer);
 
   RenderHeart(frame, number, inside_number);
@@ -249,13 +242,13 @@ void OnRender() {
   frame = (frame + 1) % 20;
   fg_index = (fg_index + 1) % (sizeof(fg) / sizeof(fg[0]));
 
-  text_index = (text_index + 1) % 160;
+  text_index = (text_index + 1) % (size * 20);
 
   SDL_FreeSurface(surface_message);
   SDL_DestroyTexture(texture);
 }
 
-int main() {
+int main(int argc, char* argv[]) {
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
     // TODO Error
     return;
@@ -263,10 +256,35 @@ int main() {
   if (TTF_Init() < 0) {
     return;
   }
+  char* title = "HEART BEAT";
 
-  window = SDL_CreateWindow("HEART BEAT", SDL_WINDOWPOS_UNDEFINED,
-                            SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT,
-                            SDL_WINDOW_SHOWN);
+  if (argc > 1) {
+    title = argv[1];
+  }
+  char** text = malloc(sizeof(char*) * 8);
+  int text_size = 8;
+
+  text[0] = "So";
+  text[1] = "get away";
+  text[2] = "Another way";
+  text[3] = "to feel what you";
+  text[4] = "didn't want yourself to know";
+  text[5] = "And let yourself go";
+  text[6] = "You know you didn't";
+  text[7] = "lose your self-control";
+
+  if (argc > 2) {
+    text = malloc(sizeof(char*) * (argc - 2));
+    text_size = argc - 2;
+    for (int i = 2; i < argc; i++) {
+      char* item = argv[i];
+      text[i - 2] = item;
+    }
+  }
+
+  window =
+      SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                       WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
   if (window == NULL) {
     // ERROR!
     return;
@@ -280,7 +298,7 @@ int main() {
       OnEvent(&event);
     }
 
-    OnRender();
+    OnRender(text, text_size);
     SDL_Delay(50);
   }
 

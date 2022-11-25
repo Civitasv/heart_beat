@@ -244,8 +244,10 @@ void OnRender(char* text[], int size) {
 
   text_index = (text_index + 1) % (size * 20);
 
+  TTF_CloseFont(font);
   SDL_FreeSurface(surface_message);
   SDL_DestroyTexture(texture);
+  free(frame_pts);
 }
 
 int main(int argc, char* argv[]) {
@@ -309,7 +311,7 @@ int main(int argc, char* argv[]) {
     SDL_DestroyWindow(window);
   }
 
-  free(frame_pts);
+  free(text);
   TTF_Quit();
   SDL_Quit();
   return 0;
